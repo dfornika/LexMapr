@@ -1,13 +1,13 @@
 import json
-import pytest
+import unittest
 
 import lexmapr.lambda_handler
 
-@pytest.fixture()
-def apigw_event():
-    """ Generates API GW Event"""
 
-    return {
+
+class TestPipelineMethods(unittest.TestCase):
+
+    apigw_event = {
         "body": "{ \"test\": \"body\"}",
         "resource": "/{proxy+}",
         "requestContext": {
@@ -82,15 +82,18 @@ def apigw_event():
         },
         "path": "/examplepath"
     }
+    
+    def test_lambda_handler(apigw_event=apigw_event):
 
-def test_lambda_handler(apigw_event):
+        ret = lexmapr.lambda_handler.lambda_handler(apigw_event, "")
+        print(ret)
+        assert ret['statusCode'] == 200
 
-    ret = lexmapr.lambda_handler.lambda_handler(apigw_event, "")
-    print(ret)
-    assert ret['statusCode'] == 200
+        for key in ('message', 'location'):
+            assert key in ret['body']
 
-    for key in ('message', 'location'):
-        assert key in ret['body']
+        data = json.loads(ret['body'])
+        assert data['message'] == 'hello world'
 
-    data = json.loads(ret['body'])
-    assert data['message'] == 'hello world'
+if __name__ == '__main__':
+    unittest.main()
