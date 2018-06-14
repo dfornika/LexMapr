@@ -1,7 +1,7 @@
 import json
 import pytest
 
-import lexmapr.lambda
+import lexmapr.lambda_handler
 
 @pytest.fixture()
 def apigw_event():
@@ -85,7 +85,8 @@ def apigw_event():
 
 def test_lambda_handler(apigw_event):
 
-    ret = lexmapr.lambda.lambda_handler(apigw_event, "")
+    ret = lexmapr.lambda_handler.lambda_handler(apigw_event, "")
+    print(ret)
     assert ret['statusCode'] == 200
 
     for key in ('message', 'location'):
