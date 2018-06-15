@@ -32,7 +32,7 @@ setup(name='lexmapr',
       ],
       test_suite='nose.collector',
       tests_require=['nose'],
-      packages=find_packages(),
+      packages=find_packages(exclude=("aws_lambda",)),
       include_package_data=True,
       scripts=['bin/lexmapr']
 )
